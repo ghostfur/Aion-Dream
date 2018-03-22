@@ -447,6 +447,8 @@ public class GameServer {
 		SupportService.getInstance();
 		HotspotTeleportService.getInstance();
 		TerritoryService.getInstance().init();
+		//EventEngine
+		EventManager.getInstance().Init();
 		if (MembershipConfig.ONLINE_BONUS_ENABLE)
 			OnlineBonus.getInstance();
 		RestartService.getInstance();
@@ -454,8 +456,6 @@ public class GameServer {
 		Util.printSection(" ### System ### ");
 		System.gc();
 		AEInfos.printAllInfos();
-		//EventEngine
-		EventManager.getInstance().Init();
 		System.out.println("");
 		log.info("[GameServer] GameServer started in " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
 

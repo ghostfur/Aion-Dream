@@ -132,7 +132,7 @@ public class BaseEventHandler extends GeneralEventHandler {
         Skill protector = SkillEngine.getInstance().getSkill(p, 9833, 1, p.getTarget());
         Effect e = new Effect(p, p, protector.getSkillTemplate(), protector.getSkillLevel(), duration);
         for (EffectTemplate et : e.getEffectTemplates()) {
-            et.setDuration2(duration);
+            et.setDuration(duration);
         }
         e.initialize();
         e.applyEffect();

@@ -107,7 +107,7 @@ public class FFAEventHandler extends BaseEventHandler {
 
         EventStartPosition esp = this.spawnPoints.getRandomPosition();
         if (esp != null) {
-            TeleportService2.teleportTo(player, this.mapId, this.instanceId, esp.getX(), esp.getY(), esp.getZ(), esp.getH(), TeleportAnimation.JUMP_AIMATION);
+            TeleportService2.teleportTo(player, this.mapId, this.instanceId, esp.getX(), esp.getY(), esp.getZ(), esp.getH(), TeleportAnimation.BEAM_ANIMATION);
         }
         return true;
     }
