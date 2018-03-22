@@ -55,4 +55,7 @@ public class LoggingConfig {
 	public static boolean LOG_SYSMAIL;
 	@Property(key = "gameserver.log.auction", defaultValue = "true")
 	public static boolean LOG_HOUSE_AUCTION;
+	public static boolean LOG_INGAMESHOP;
+	@Property(key="gameserver.log.ingameshop.sql", defaultValue="false")
+	public static boolean LOG_INGAMESHOP_SQL;
 }
