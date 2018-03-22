@@ -14,7 +14,6 @@
  *  along with Aion-Lightning.
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.instance;
 
 import java.io.File;
@@ -30,7 +29,6 @@ import com.aionemu.commons.scripting.classlistener.OnClassLoadUnloadListener;
 import com.aionemu.commons.scripting.classlistener.ScheduledTaskClassListener;
 import com.aionemu.commons.scripting.scriptmanager.ScriptManager;
 import com.aionemu.gameserver.GameServerError;
-import com.aionemu.gameserver.instance.handlers.EventID;
 import com.aionemu.gameserver.instance.handlers.GeneralInstanceHandler;
 import com.aionemu.gameserver.instance.handlers.InstanceHandler;
 import com.aionemu.gameserver.instance.handlers.InstanceID;
@@ -48,12 +46,10 @@ public class InstanceEngine implements GameEngine {
 	public static final File INSTANCE_DESCRIPTOR_FILE = new File("./data/scripts/system/instancehandlers.xml");
 	public static final InstanceHandler DUMMY_INSTANCE_HANDLER = new GeneralInstanceHandler();
 	private Map<Integer, Class<? extends InstanceHandler>> handlers = new HashMap<Integer, Class<? extends InstanceHandler>>();
-    // EventEngine
-    private Map<Integer, Class<? extends InstanceHandler>> eventHandlers = new HashMap<Integer, Class<? extends InstanceHandler>>();
 
 	@Override
 	public void load(CountDownLatch progressLatch) {
-		log.info("Instance engine load started");
+		log.info("[InstanceEngine] Instance engine load started");
 		scriptManager = new ScriptManager();
 
 		AggregatedClassListener acl = new AggregatedClassListener();
@@ -64,10 +60,12 @@ public class InstanceEngine implements GameEngine {
 
 		try {
 			scriptManager.load(INSTANCE_DESCRIPTOR_FILE);
-			log.info("Loaded " + handlers.size() + " instance handlers.");
-		} catch (Exception e) {
-			throw new GameServerError("Can't initialize instance handlers.", e);
-		} finally {
+			log.info("[InstanceEngine] Loaded " + handlers.size() + " instance handlers.");
+		}
+		catch (Exception e) {
+			throw new GameServerError("[InstanceEngine] Can't initialize instance handlers.", e);
+		}
+		finally {
 			if (progressLatch != null) {
 				progressLatch.countDown();
 			}
@@ -76,17 +74,16 @@ public class InstanceEngine implements GameEngine {
 
 	@Override
 	public void shutdown() {
-		log.info("Instance engine shutdown started");
+		log.info("[InstanceEngine] Instance engine shutdown started");
 		scriptManager.shutdown();
 		scriptManager = null;
 		handlers.clear();
-		eventHandlers.clear(); // new
-		log.info("Instance engine shutdown complete");
+		log.info("[InstanceEngine] Instance engine shutdown complete");
 	}
 
 	public void reload() {
 		Util.printSection("Instances");
-		log.info("Reloading instances");
+		log.info("[InstanceEngine] Reloading instances");
 		ScriptManager tmpSM;
 		try {
 			tmpSM = new ScriptManager();
@@ -97,14 +94,18 @@ public class InstanceEngine implements GameEngine {
 			tmpSM.setGlobalClassListener(acl);
 			try {
 				tmpSM.load(INSTANCE_DESCRIPTOR_FILE);
-			} catch (Exception e) {
-				throw new GameServerError("Error", e);
 			}
-		} catch (Exception e) {
-			throw new GameServerError("Error", e);
+			catch (Exception e) {
+				throw new GameServerError("[InstanceEngine] Error", e);
+			}
 		}
-		shutdown();
-		load(null);
+		catch (Exception e) {
+			throw new GameServerError("[InstanceEngine] Error", e);
+		}
+		if (tmpSM != null) {
+			shutdown();
+			load(null);
+		}
 	}
 
 	public InstanceHandler getNewInstanceHandler(int worldId) {
@@ -113,8 +114,9 @@ public class InstanceEngine implements GameEngine {
 		if (instanceClass != null) {
 			try {
 				instanceHandler = instanceClass.newInstance();
-			} catch (Exception ex) {
-				log.warn("Can't instantiate instance handler " + worldId, ex);
+			}
+			catch (Exception ex) {
+				log.warn("[InstanceEngine] Can't instantiate instance handler " + worldId, ex);
 			}
 		}
 		if (instanceHandler == null) {
@@ -123,37 +125,15 @@ public class InstanceEngine implements GameEngine {
 		return instanceHandler;
 	}
 
-    // EventEngine
-    public InstanceHandler getNewEventInstanceHandler(int handlerId) {
-        Class<? extends InstanceHandler> instanceClass = this.eventHandlers.get(handlerId);
-        InstanceHandler instanceHandler = null;
-        if (instanceClass != null) {
-            try {
-                instanceHandler = instanceClass.newInstance();
-            } catch (Exception ex) {
-                log.warn("Can't instantiate event instance handler " + handlerId, ex);
-            }
-        }
-        if (instanceHandler == null) {
-            instanceHandler = DUMMY_INSTANCE_HANDLER;
-        }
-        return instanceHandler;
-    }
-
-    /**
-     * @param handler
-     */
-    final void addInstanceHandlerClass(Class<? extends InstanceHandler> handler) {
-        InstanceID idAnnotation = handler.getAnnotation(InstanceID.class);
-        if (idAnnotation != null) {
-            handlers.put(idAnnotation.value(), handler);
-        } else { // new
-            EventID eA = handler.getAnnotation(EventID.class);
-            if (eA != null) {
-                this.eventHandlers.put(eA.eventId(), handler);
-            }
-        }
-    }
+	/**
+	 * @param handler
+	 */
+	final void addInstanceHandlerClass(Class<? extends InstanceHandler> handler) {
+		InstanceID idAnnotation = handler.getAnnotation(InstanceID.class);
+		if (idAnnotation != null) {
+			handlers.put(idAnnotation.value(), handler);
+		}
+	}
 
 	/**
 	 * @param instance
