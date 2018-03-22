@@ -70,6 +70,7 @@ import com.aionemu.gameserver.services.toypet.PetSpawnService;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
+import pirate.events.EventManager;
 
 /**
  * @author ATracer
@@ -117,6 +118,7 @@ public class PlayerLeaveWorldService {
 		FindGroupService.getInstance().removeFindGroup(player.getRace(), 0x00, player.getObjectId());
 		FindGroupService.getInstance().removeFindGroup(player.getRace(), 0x04, player.getObjectId());
 		player.onLoggedOut();
+		EventManager.getInstance().unregisterPlayer(player);
 		PetService.getInstance().onPlayerLogout(player);
 		BrokerService.getInstance().removePlayerCache(player);
 		ExchangeService.getInstance().cancelExchange(player);

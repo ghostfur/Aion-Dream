@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import pirate.events.xml.EventsData;
+
 import com.aionemu.gameserver.model.templates.mail.Mails;
 
 /**
@@ -255,6 +257,8 @@ public class StaticData {
     public MonsterbookData monsterbookData;
 	@XmlElement(name = "boost_events")
 	public BoostEventData boostEvents;
+	@XmlElement(name="events")
+  	public EventsData f14_eventsData;
 
 	// JAXB callback
 	@SuppressWarnings("unused")
@@ -371,5 +375,6 @@ public class StaticData {
 		DataManager.log.info("[DataManager] Loaded " + temperingRateData.size() + " Tempering rates data");
 		DataManager.log.info("[DataManager] Loaded " + monsterbookData.size() + " Monsterbook templates");
 		DataManager.log.info("[DataManager] Loaded " + boostEvents.size() + " Boost Event templates");
+		DataManager.log.info("[DataManager] Loaded " + f14_eventsData.size() + " event engine holders.");
 	}
 }

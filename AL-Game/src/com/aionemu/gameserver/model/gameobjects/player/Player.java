@@ -204,6 +204,9 @@ public class Player extends Creature {
 	private float resPosX = 0;
 	private float resPosY = 0;
 	private float resPosZ = 0;
+	private float f;
+	private float oldy;
+	private float oldz;
 	private boolean underNoFPConsum = false;
 	private boolean isAdminTeleportation = false;
 	private boolean cooldownZero = false;
@@ -1342,11 +1345,10 @@ public class Player extends Creature {
     }
 
 	public boolean isAggroIconTo(Player player) {
-		if (getAdminEnmity() > 1 || player.getAdminEnmity() > 1) {
-			return true;
+	      if ((getAdminEnmity() > 1) || (player.getAdminEnmity() > 1) || (getPosition().getWorldMapInstance().getInstanceHandler().isEnemy(this, player)))
+	        return true;
+			return !player.getRace().equals(getRace());
 		}
-		return !player.getRace().equals(getRace());
-	}
 
 	private boolean canPvP(Player enemy) {
 		int worldId = enemy.getWorldId();
@@ -2243,6 +2245,7 @@ public class Player extends Creature {
 
 	private PlayerVarsDAO daoVars = DAOManager.getDAO(PlayerVarsDAO.class);
 	private Map<String, Object> vars = FastMap.newInstance();
+	private float oldx;
 
 	public boolean hasVar(String key) {
 		return vars.containsKey(key);
@@ -2758,6 +2761,30 @@ public class Player extends Creature {
 
 	public AbsoluteStatOwner getAbsoluteStats() {
 		return absStatsHolder;
+	}
+	
+	public float getOldX() {
+		return oldx;
+	}
+
+	public void setOldX(float oldx) {
+		this.oldx = oldx;
+	}
+
+	public float getOldY() {
+		return oldy;
+	}
+
+	public void setOldY(float oldy) {
+		this.oldy = oldy;
+	}
+
+	public float getOldZ() {
+		return oldz;
+	}
+
+	public void setOldZ(float oldz) {
+		this.oldz = oldz;
 	}
 
 	public boolean isOnFastTrack() {

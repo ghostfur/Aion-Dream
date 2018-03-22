@@ -40,6 +40,10 @@ public class PacketSendUtility {
 	/**
 	 * Global message sending
 	 */
+	public static void sendMessage(Player player, String senderName, String msg, ChatType chatType) { 
+		sendPacket(player, new SM_MESSAGE(0, senderName, msg, chatType));
+	}	
+	
 	public static void sendMessage(Player player, String msg) {
 		sendPacket(player, new SM_MESSAGE(0, null, msg, ChatType.YELLOW));
 	}

@@ -29,6 +29,7 @@ import com.aionemu.commons.scripting.classlistener.OnClassLoadUnloadListener;
 import com.aionemu.commons.scripting.classlistener.ScheduledTaskClassListener;
 import com.aionemu.commons.scripting.scriptmanager.ScriptManager;
 import com.aionemu.gameserver.GameServerError;
+import com.aionemu.gameserver.instance.handlers.EventID;
 import com.aionemu.gameserver.instance.handlers.GeneralInstanceHandler;
 import com.aionemu.gameserver.instance.handlers.InstanceHandler;
 import com.aionemu.gameserver.instance.handlers.InstanceID;
@@ -46,6 +47,8 @@ public class InstanceEngine implements GameEngine {
 	public static final File INSTANCE_DESCRIPTOR_FILE = new File("./data/scripts/system/instancehandlers.xml");
 	public static final InstanceHandler DUMMY_INSTANCE_HANDLER = new GeneralInstanceHandler();
 	private Map<Integer, Class<? extends InstanceHandler>> handlers = new HashMap<Integer, Class<? extends InstanceHandler>>();
+	// EventEngine
+    private Map<Integer, Class<? extends InstanceHandler>> eventHandlers = new HashMap<Integer, Class<? extends InstanceHandler>>();
 
 	@Override
 	public void load(CountDownLatch progressLatch) {
@@ -78,6 +81,7 @@ public class InstanceEngine implements GameEngine {
 		scriptManager.shutdown();
 		scriptManager = null;
 		handlers.clear();
+		eventHandlers.clear(); // new
 		log.info("[InstanceEngine] Instance engine shutdown complete");
 	}
 
@@ -124,6 +128,23 @@ public class InstanceEngine implements GameEngine {
 		}
 		return instanceHandler;
 	}
+	
+	// EventEngine
+    public InstanceHandler getNewEventInstanceHandler(int handlerId) {
+        Class<? extends InstanceHandler> instanceClass = this.eventHandlers.get(handlerId);
+        InstanceHandler instanceHandler = null;
+        if (instanceClass != null) {
+            try {
+                instanceHandler = instanceClass.newInstance();
+            } catch (Exception ex) {
+                log.warn("Can't instantiate event instance handler " + handlerId, ex);
+            }
+        }
+        if (instanceHandler == null) {
+            instanceHandler = DUMMY_INSTANCE_HANDLER;
+        }
+        return instanceHandler;
+    }
 
 	/**
 	 * @param handler
@@ -132,6 +153,11 @@ public class InstanceEngine implements GameEngine {
 		InstanceID idAnnotation = handler.getAnnotation(InstanceID.class);
 		if (idAnnotation != null) {
 			handlers.put(idAnnotation.value(), handler);
+		} else { // new
+	        EventID eA = handler.getAnnotation(EventID.class);
+	        if (eA != null) {
+	            this.eventHandlers.put(eA.eventId(), handler);
+	        }
 		}
 	}
 

@@ -486,7 +486,17 @@ public enum CustomMessageId {
 	SPREE_END_MSG2(" has been stopped by "),
 	SPREE_END_MSG3(" after "),
 	SPREE_END_MSG4(" uninterrupted murders !"),
-	SPREE_MONSTER_MSG("a monster");
+	SPREE_MONSTER_MSG("a monster"),
+	/**
+	* EventEngine - EventUtil
+	*/
+	Event_Util_1("You can not use this command."),
+	Event_Util_2("Wrong Event Type."),
+	Event_Util_3("Unknown User."),	
+	/**
+	* EventEngine - Event
+	*/
+	Event_1("You can not participate in the event, while you are in prison, or during the fight.");	
 
 	private String fallbackMessage;
 

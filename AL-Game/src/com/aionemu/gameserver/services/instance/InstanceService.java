@@ -26,6 +26,7 @@ import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.configs.main.MembershipConfig;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.instance.InstanceEngine;
+import com.aionemu.gameserver.instance.handlers.GeneralEventHandler;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -51,6 +52,7 @@ import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.WorldMapInstanceFactory;
 import com.aionemu.gameserver.world.WorldMapType;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
+import pirate.events.holders.IEventHolder;
 
 import javolution.util.FastList;
 
@@ -101,6 +103,34 @@ public class InstanceService {
 
 		return worldMapInstance;
 	}
+	
+	// EventEngine
+    public synchronized static WorldMapInstance getNextAvailableEventInstance(IEventHolder holder) {
+        int worldId = holder.getEventType().getEventTemplate().getMapId();
+        int eventHandlerId = holder.getEventType().getEventTemplate().getEventId();
+
+        WorldMap map = World.getInstance().getWorldMap(worldId);
+
+        if (!map.isInstanceType()) {
+            throw new UnsupportedOperationException("Invalid call for next available instance  of " + worldId);
+        }
+
+        int nextInstanceId = map.getNextInstanceId();
+        log.info("Creating new Event instance:" + worldId + " id:" + nextInstanceId + " eventId:" + eventHandlerId);
+        WorldMapInstance worldMapInstance = WorldMapInstanceFactory.createEventWorldMapInstance(map, nextInstanceId, eventHandlerId);
+
+        map.addInstance(nextInstanceId, worldMapInstance);
+        //SpawnEngine.spawnInstance(worldId, worldMapInstance.getInstanceId(), (byte) 0, 0);
+        ((GeneralEventHandler) worldMapInstance.getInstanceHandler()).setEventType(holder.getEventType());
+        InstanceEngine.getInstance().onInstanceCreate(worldMapInstance);
+
+        // finally start the checker
+        if (map.isInstanceType()) {
+            startInstanceChecker(worldMapInstance);
+        }
+
+        return worldMapInstance;
+    }
 
 	public synchronized static WorldMapInstance getNextAvailableInstance(int worldId) {
 		return getNextAvailableInstance(worldId, 0);

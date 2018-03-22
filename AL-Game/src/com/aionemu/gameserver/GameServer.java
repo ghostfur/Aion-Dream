@@ -162,6 +162,7 @@ import com.aionemu.gameserver.utils.javaagent.JavaAgentUtils;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.zone.ZoneService;
+import pirate.events.EventManager;
 
 import ch.lambdaj.Lambda;
 import ch.qos.logback.classic.LoggerContext;
@@ -453,6 +454,8 @@ public class GameServer {
 		Util.printSection(" ### System ### ");
 		System.gc();
 		AEInfos.printAllInfos();
+		//EventEngine
+		EventManager.getInstance().Init();
 		System.out.println("");
 		log.info("[GameServer] GameServer started in " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
 

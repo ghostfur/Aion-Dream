@@ -55,6 +55,8 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.TimeUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import pirate.events.EventManager;
+import pirate.events.enums.EventType;
 
 import javolution.util.FastMap;
 
@@ -182,6 +184,7 @@ public class PlayerGroupService {
 	 */
 	public static final void addPlayer(PlayerGroup group, Player player) {
 		Preconditions.checkNotNull(group, "Group should not be null");
+		EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 		group.onEvent(new PlayerEnteredEvent(group, player));
 	}
 
@@ -191,6 +194,7 @@ public class PlayerGroupService {
 	public static final void removePlayer(Player player) {
 		PlayerGroup group = player.getPlayerGroup2();
 		if (group != null) {
+			EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 			group.onEvent(new PlayerGroupLeavedEvent(group, player));
 		}
 	}
@@ -204,6 +208,7 @@ public class PlayerGroupService {
 		PlayerGroup group = banGiver.getPlayerGroup2();
 		if (group != null) {
 			if (group.hasMember(bannedPlayer.getObjectId())) {
+				EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 				group.onEvent(new PlayerGroupLeavedEvent(group, bannedPlayer, LeaveReson.BAN, banGiver.getName()));
 			}
 			else {
@@ -219,6 +224,7 @@ public class PlayerGroupService {
 	public static void disband(PlayerGroup group) {
 		Preconditions.checkState(group.onlineMembers() <= 1, "Can't disband group with more than one online member");
 		groups.remove(group.getTeamId());
+		EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 		group.onEvent(new GroupDisbandEvent(group));
 	}
 
