@@ -14,6 +14,7 @@
  *  along with Aion-Lightning.
  *  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.aionemu.gameserver.model.team2.group;
 
 import java.util.Map;
@@ -55,8 +56,9 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.TimeUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-
 import javolution.util.FastMap;
+import pirate.events.EventManager;
+import pirate.events.enums.EventType;
 
 /**
  * @author ATracer
@@ -80,27 +82,16 @@ public class PlayerGroupService {
 	public static final boolean canInvite(Player inviter, Player invited) {
 		if (inviter.isInInstance()) {
 			if (AutoGroupService.getInstance().isAutoInstance(inviter.getInstanceId())) {
-				PacketSendUtility.sendPacket(inviter, SM_SYSTEM_MESSAGE.STR_MSG_INSTANCE_CANT_OPERATE_PARTY_COMMAND);
+				PacketSendUtility.sendPacket(inviter, SM_SYSTEM_MESSAGE.STR_MSG_INSTANCE_CANT_INVITE_PARTY_COMMAND);
 				return false;
 			}
 		}
 		if (invited.isInInstance()) {
 			if (AutoGroupService.getInstance().isAutoInstance(invited.getInstanceId())) {
-				PacketSendUtility.sendPacket(inviter, SM_SYSTEM_MESSAGE.STR_MSG_INSTANCE_CANT_OPERATE_PARTY_COMMAND);
+				PacketSendUtility.sendPacket(inviter, SM_SYSTEM_MESSAGE.STR_MSG_INSTANCE_CANT_INVITE_PARTY_COMMAND);
 				return false;
 			}
 		}
-		PlayerGroup group = inviter.getPlayerGroup2();
-        if (group != null) {
-            if (invited.isInTeam()) {
-                for (Player pm: invited.getCurrentTeam().getMembers()) {
-                    if (pm.isInInstance()) {
-                        PacketSendUtility.sendPacket(inviter, new SM_SYSTEM_MESSAGE(1400128));
-                        return false;
-                    }
-                }
-            }
-        }
 		return RestrictionsManager.canInviteToGroup(inviter, invited);
 	}
 
@@ -115,18 +106,7 @@ public class PlayerGroupService {
 		}
 		return newGroup;
 	}
-	
-	@GlobalCallback(PlayerGroupCreateCallback.class)
-    public static final PlayerGroup createGroup(Player leader) {
-        PlayerGroup newGroup = new PlayerGroup(new PlayerGroupMember(leader), TeamType.GROUP);
-        groups.put(newGroup.getTeamId(), newGroup);
-        addPlayer(newGroup, leader);
-        if (offlineCheckStarted.compareAndSet(false, true)) {
-            initializeOfflineCheck();
-        }
-        return newGroup;
-    }
-	
+
 	private static void initializeOfflineCheck() {
 		ThreadPoolManager.getInstance().scheduleAtFixedRate(new OfflinePlayerChecker(), 1000, 30 * 1000);
 	}
@@ -182,6 +162,7 @@ public class PlayerGroupService {
 	 */
 	public static final void addPlayer(PlayerGroup group, Player player) {
 		Preconditions.checkNotNull(group, "Group should not be null");
+		EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 		group.onEvent(new PlayerEnteredEvent(group, player));
 	}
 
@@ -191,6 +172,7 @@ public class PlayerGroupService {
 	public static final void removePlayer(Player player) {
 		PlayerGroup group = player.getPlayerGroup2();
 		if (group != null) {
+			EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 			group.onEvent(new PlayerGroupLeavedEvent(group, player));
 		}
 	}
@@ -204,9 +186,9 @@ public class PlayerGroupService {
 		PlayerGroup group = banGiver.getPlayerGroup2();
 		if (group != null) {
 			if (group.hasMember(bannedPlayer.getObjectId())) {
+				EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 				group.onEvent(new PlayerGroupLeavedEvent(group, bannedPlayer, LeaveReson.BAN, banGiver.getName()));
-			}
-			else {
+			} else {
 				log.warn("TEAM2: banning player not in group {}", group.onlineMembers());
 			}
 		}
@@ -219,6 +201,7 @@ public class PlayerGroupService {
 	public static void disband(PlayerGroup group) {
 		Preconditions.checkState(group.onlineMembers() <= 1, "Can't disband group with more than one online member");
 		groups.remove(group.getTeamId());
+		EventManager.getInstance().unregisterPlayerGroup(group.getLeaderObject()).sendMessageToGroupMebmers(group);
 		group.onEvent(new GroupDisbandEvent(group));
 	}
 

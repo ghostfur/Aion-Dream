@@ -21,7 +21,6 @@ import com.aionemu.gameserver.utils.i18n.CustomMessageId;
 import com.aionemu.gameserver.utils.i18n.Language;
 
 public class Russian extends Language {
-
 	public Russian() {
 		super("ru");
 		addSupportedLanguage("ru_RU");
@@ -293,13 +292,6 @@ public class Russian extends Language {
 		addTranslatedMessage(CustomMessageId.INVASION_RIFT_ASMOS, "Пространственный разлом в Элизиум открылся в локации: Келькмарос");
 
 		/**
-		 * Additional Chest Drops
-		 */
-		addTranslatedMessage(CustomMessageId.DECOMPOSE_SERVICE_MESSAGE1, "%s has obtained %s from %s.");
-		addTranslatedMessage(CustomMessageId.DECOMPOSE_SERVICE_MESSAGE2, "%s has obtained additional %s from %s (Premium).");
-		addTranslatedMessage(CustomMessageId.DECOMPOSE_SERVICE_MESSAGE3, "%s has obtained additional %s from %s (VIP).");
-
-		/**
 		 * PvP Spree Service
 		 */
 		addTranslatedMessage(CustomMessageId.SPREE1, "Bloody Storm");
@@ -318,5 +310,17 @@ public class Russian extends Language {
 		addTranslatedMessage(CustomMessageId.SPREE_END_MSG3, " after ");
 		addTranslatedMessage(CustomMessageId.SPREE_END_MSG4, " uninterrupted murders !");
 		addTranslatedMessage(CustomMessageId.SPREE_MONSTER_MSG, "a monster");
+
+		/**
+		 * EventEngine - EventUtil
+		 */
+		addTranslatedMessage(CustomMessageId.Event_Util_1, "Вы не можете использовать эту команду.");
+		addTranslatedMessage(CustomMessageId.Event_Util_2, "Неверный тип ивента.");
+		addTranslatedMessage(CustomMessageId.Event_Util_3, "Неизвестная инструкция.");
+
+		/**
+		* EventEngine - Event
+		*/
+		addTranslatedMessage(CustomMessageId.Event_1, "Нельзя участвовать в ивенте, пока вы в тюрьме, во временной зоне либо в состоянии боя.");	
 	}
 }

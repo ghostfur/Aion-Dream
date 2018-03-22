@@ -14,6 +14,7 @@
  *  along with Aion-Lightning.
  *  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.aionemu.gameserver.utils.i18n;
 
 import com.aionemu.gameserver.configs.network.NetworkConfig;
@@ -27,8 +28,8 @@ public enum CustomMessageId {
 	WELCOME_REGULAR("Welcome to %s server.\nPowered by " + getMaster() + ".\nSERVER RATES:\nExp Rate: %d\nQuest Rate: %d\nDrop Rate: %d"),
 	SERVER_REVISION("Server Revision: %-6s"),
 	WELCOME_BASIC("Welcome On "),
-	HOMEPAGE("Homepage:www.dreamaion.net"),
-	TEAMSPEAK("Discord:www.discordapp.com/invite/pxsgWwS"),
+	HOMEPAGE("Homepage:www.myserver.com"),
+	TEAMSPEAK("Teamspeak3:ts3.myserver.com"),
 	INFO1("WARNING: Using of third-party software (speed hack&Co.) will be punished with permanent ban (Ban MAC)"),
 	INFO2("Note: Likewise, hacking will result in an immediate ban regardless of reasons behind it."),
 	INFO3("Note: The advertising for other servers is prohibited.Breaking this rule will result a permanent ban!"),
@@ -67,6 +68,8 @@ public enum CustomMessageId {
 	COMMAND_ADDTITLE_CANNOT_ADD_TITLE_TO_PLAYER("You can't add title %d to %s"),
 	COMMAND_ADDTITLE_ADMIN_SUCCESS_ME("You added title %d to yourself with success"),
 	COMMAND_ADDTITLE_ADMIN_SUCCESS("You added title %d to %s with success"),
+	COMMAND_ATTRBONUS_MESSAGE1("Syntax //attrbonus <modifier> <value>"),
+	COMMAND_ATTRBONUS_MESSAGE2("Parameter should number"),
 	COMMAND_ADDTITLE_PLAYER_SUCCESS("Admin %s gave you title %d"),
 	COMMAND_SEND_SYNTAX("Syntax: //send <filename>"),
 	COMMAND_SEND_MAPPING_NOT_FOUND("Mapping %s not found"),
@@ -180,12 +183,6 @@ public enum CustomMessageId {
 	TOLOWTOLL("You don't have enough Toll!"),
 	WRONGTOLLNUM("Something went wrong!"),
 	/**
-	 * Luna System
-	 */
-	LUNATOBIG("You have to much Luna Coins!"),
-	TOLOWLUNA("You don't have enough Luna Coins!"),
-	WRONGLUNANUM("Something went wrong!"),
-	/**
 	 * Cube Command
 	 */
 	CUBE_ALLREADY_EXPANDED("You're cube is allready fully expanded!"),
@@ -290,7 +287,6 @@ public enum CustomMessageId {
 	BATTLEGROUNDAGENTCONTROLLER_1("You are already registered in a battleground."),
 	BATTLEGROUNDFLAGCONTROLLER_2("unhandled case."),
 	BATTLEGROUNDFLAGCONTROLLER_3("Do you want to register in a battleground ?"),
-
 	COMMAND_BATTLEGROUND_MESSAGE0("You cannot register for battlegrounds while you are in prison."),
 	COMMAND_BATTLEGROUND_MESSAGE1("You are already in a battleground."),
 	COMMAND_BATTLEGROUND_MESSAGE2("Use your spell Return to leave the battleground."),
@@ -336,27 +332,6 @@ public enum CustomMessageId {
 	COMMAND_BATTLEGROUND_MESSAGE42("help"),
 	COMMAND_BATTLEGROUND_MESSAGE43("points"),
 	/**
-     * FFA System
-     */
-    FFA_IS_ALREADY_IN_TEAM("Please leave your team and try again."),
-    FFA_IS_ALREADY_IN("You're already on FFA"),
-    FFA_FROZEN_MESSAGE("You're frozen for a while..."),
-    FFA_CURRENT_PLAYERS("Current Players Size :"),
-    FFA_USAGE("Usage: .FFA enter, to enter the arena .FFA leave, to leave the arena.\n.FFA info, to get current amount of Players on FFA "),
-    FFA_YOU_KICKED_OUT("You have been evicted from FFA"),
-    FFA_YOUR_NOT_IN("You're not member of FFA Arena."),
-    FFA_ANNOUNCE_1("Join our FFA Map now with using //ffa enter ! "),
-    FFA_ANNOUNCE_2(" Already Did It."),
-    FFA_ANNOUNCE_3("Join FFA Now!"),
-    FFA_GHOST_KILL("A ghost killed "),
-    FFA_KILL_MESSAGE(" has slain "),
-    FFA_KILL_NAME_1(" do his best!"),
-    FFA_KILL_NAME_2(" is on the trip!"),
-    FFA_KILL_NAME_3(" want more blood!"),
-    FFA_KILL_NAME_4(" is like a crazy monster!"),
-    FFA_KILL_NAME_5(" are you okay? "),
-    FFA_KILL_NAME_6(" fucking kills?"),
-    /**
 	 * Exchange Command
 	 */
 	NOT_ENOUGH_ITEM("You dont have enough from: "),
@@ -383,6 +358,7 @@ public enum CustomMessageId {
 	DIM_VORTEX_SPAWNED_ELYOS("The Dimensional Vortex was opened for Elyos!"),
 	DIM_VORTEX_SPAWNED_ASMO("The Dimensional Vortex was opened for Asmodians!"),
 	DIM_VORTEX_DESPAWNED("The Dimensional Assault finished!"),
+
 
 	/**
 	 * Legendary Raid Spawn Events
@@ -437,15 +413,15 @@ public enum CustomMessageId {
 	 * GM Announce
 	 */
 	TAG_1(" [Supporter] "),
-	TAG_2(" [Junior-GM] "),
-	TAG_3(" [Senior-GM] "),
+	TAG_2(" [Jr-GM] "),
+	TAG_3(" [GM] "),
 	TAG_4(" [Head-GM] "),
 	TAG_5(" [Admin] "),
-	TAG_6(" [Developer] "),
-	TAG_7(" [Server-CoAdmin] "),
-	TAG_8(" [Server-Admin] "),
-	TAG_9(" (Server-CoOwner) "),
-	TAG_10(" [Server-Owner] "),
+	TAG_6(" [R-Admin1] "),
+	TAG_7(" [R-Admin2] "),
+	TAG_8(" [R-Admin3] "),
+	TAG_9(" (Co-Owner) "),
+	TAG_10(" [S-Owner] "),
 	/**
 	 * Shugo Imperial Tomb Event
 	 */
@@ -462,12 +438,6 @@ public enum CustomMessageId {
 	INVASION_RIFT_MIN_LEVEL("Your level is too low to enter."),
 	INVASION_RIFT_ELYOS("A rift for Pandaemonium is open at Ingisson"),
 	INVASION_RIFT_ASMOS("A rift for Sanctum is open at Gelkmaros"),
-	/**
-	 * Additional Chest Drops
-	 */
-	DECOMPOSE_SERVICE_MESSAGE1("%s has obtained %s from %s."),
-	DECOMPOSE_SERVICE_MESSAGE2("%s has obtained additional %s from %s (Premium)."),
-	DECOMPOSE_SERVICE_MESSAGE3("%s has obtained additional %s from %s (VIP)."),
 	/**
 	 * PvP Spree Service
 	 */
@@ -486,8 +456,18 @@ public enum CustomMessageId {
 	SPREE_END_MSG2(" has been stopped by "),
 	SPREE_END_MSG3(" after "),
 	SPREE_END_MSG4(" uninterrupted murders !"),
-	SPREE_MONSTER_MSG("a monster");
-
+	SPREE_MONSTER_MSG("a monster"),
+	/**
+	* EventEngine - EventUtil
+	*/
+	Event_Util_1("You can not use this command."),
+	Event_Util_2("Wrong Event Type."),
+	Event_Util_3("Unknown User."),	
+	/**
+	* EventEngine - Event
+	*/
+	Event_1("You can not participate in the event, while you are in prison, or during the fight.");		
+	
 	private String fallbackMessage;
 
 	private CustomMessageId(String fallbackMessage) {
