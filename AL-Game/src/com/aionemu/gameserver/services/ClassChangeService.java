@@ -186,6 +186,18 @@ public class ClassChangeService {
 				// Optimate @Enomine
 				completeQuest(player, 2008);
 				completeQuest(player, 2009);
+				
+				// AutoLearn skills craft
+				SkillLearnService.addMissingSkills(player);
+				player.getSkillList().addSkill(player, 30002, 499); // Vita
+		        player.getSkillList().addSkill(player, 30003, 499); // Ether
+		        player.getSkillList().addSkill(player, 40001, 550); // Cuisine
+		        player.getSkillList().addSkill(player, 40002, 550); // Armes
+		        player.getSkillList().addSkill(player, 40003, 550); // Armure
+		        player.getSkillList().addSkill(player, 40004, 550); // Couture
+		        player.getSkillList().addSkill(player, 40007, 550); // Alchimie
+		        player.getSkillList().addSkill(player, 40008, 550); // Artisanat
+				
 
 				// Stigma Quests Asmodians
 				if (player.havePermission(MembershipConfig.STIGMA_SLOT_QUEST)) {
