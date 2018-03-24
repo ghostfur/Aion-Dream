@@ -60,6 +60,10 @@ public class SM_MESSAGE extends AionServerPacket {
 	private float x;
 	private float y;
 	private float z;
+	/**
+	 * Chat Type
+	 */
+	private int chatTypeInt;
 
 	/**
 	 * Constructs new <tt>SM_MESSAGE </tt> packet
@@ -100,6 +104,16 @@ public class SM_MESSAGE extends AionServerPacket {
 		this.senderName = senderName;
 		this.message = message;
 		this.chatType = chatType;
+	}
+	
+	/**
+	 * Custom SM MESSAGE
+	 */
+	public SM_MESSAGE(int senderObjectId, String senderName, String message, int chatType) {
+		this.senderObjectId = senderObjectId;
+		this.senderName = senderName;
+		this.message = message;
+		this.chatTypeInt = chatType;
 	}
 
 	/**
