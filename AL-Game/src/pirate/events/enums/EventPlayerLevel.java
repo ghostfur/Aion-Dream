@@ -29,7 +29,8 @@ public enum EventPlayerLevel {
     L40_50(true, 41, 50),
     L50_55(true, 51, 55),
     L55_60(true, 56, 60),
-    L60_65(true, 61, 65);
+    L60_65(true, 61, 65),
+    L65_75(true, 65, 75);
     private boolean regular;
     private int min;
     private int max;
