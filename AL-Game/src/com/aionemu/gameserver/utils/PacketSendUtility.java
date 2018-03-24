@@ -40,10 +40,6 @@ public class PacketSendUtility {
 	/**
 	 * Global message sending
 	 */
-	public static void sendMessage(Player player, String senderName, String msg, ChatType chatType) { 
-		sendPacket(player, new SM_MESSAGE(0, senderName, msg, chatType));
-	}	
-	
 	public static void sendMessage(Player player, String msg) {
 		sendPacket(player, new SM_MESSAGE(0, null, msg, ChatType.YELLOW));
 	}
@@ -86,6 +82,22 @@ public class PacketSendUtility {
 
 	public static void sendWarnMessageOnCenter(Player player, String msg) {
 		sendPacket(player, new SM_MESSAGE(0, null, msg, ChatType.LEAGUE_ALERT));
+	}
+	
+	/**
+	 * Custom Message
+	 */
+	
+	public static void sendMessage(Player player, String senderName, String msg, ChatType chatType) {
+		sendPacket(player, new SM_MESSAGE(0, senderName, msg, chatType));
+	}
+	
+	public static void sendMessage(Player player, String msg, int chatType) {
+		sendPacket(player, new SM_MESSAGE(0, null, msg, chatType));
+	}
+	  
+	public static void sendMessage(Player player, String msg, ChatType chatType) {
+		sendPacket(player, new SM_MESSAGE(0, null, msg, chatType));
 	}
 
 	/**
